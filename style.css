@@ -1,5 +1,5 @@
 /* =========================
-   Variables & Reset
+   CSS Variables & Global Reset
    ========================= */
 :root {
   --bg: linear-gradient(140deg, #667eea 0%, #764ba2 100%);
@@ -15,7 +15,7 @@
   --button-equal-bg: linear-gradient(135deg, rgb(78, 205, 194), #4453a0);
   --button-equal-bg-hover: linear-gradient(0deg, rgb(38, 208, 206), #2bb8a3);
 
-  /* layout variables used for history positioning */
+  /* Layout dimensions for responsive behavior */
   --main-width: 380px;
   --history-width: 200px;
   --main-padding: 30px;
@@ -28,12 +28,13 @@
 }
 
 /* =========================
-   Page layout
+   Base Layout & Body Styles
    ========================= */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, Cantarell, sans-serif;
   background: var(--bg);
   min-height: 100vh;
+  min-width: 280px; /* prevents breaking on very small screens */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,26 +48,34 @@ main {
   border-radius: 24px;
   padding: var(--main-padding);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 16px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 440px;
+  min-width: 260px; /* ensures calculator never gets too small */
+  margin: 0 auto;
 }
 
 /* =========================
-   Calculator area
+   Calculator Main Container
    ========================= */
 .Calculator {
   position: relative;
-  width: var(--main-width);
+  width: 100%;
+  max-width: var(--main-width);
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 3; /* sits above History */
+  z-index: 3; /* sits above history panel */
 }
 
-/* top bar: display + history icon */
+/* Top section containing display and history toggle */
 .Calculator__top {
   position: relative;
 }
 
-/* screen / display styles */
+/* =========================
+   Display Screen Styles
+   ========================= */
 .Display {
   background: var(--button-result-bg);
   color: #fff;
@@ -83,15 +92,16 @@ main {
   letter-spacing: 1px;
   overflow: hidden;
   word-break: break-all;
-  padding-left: 88px; /* space for history icon */
+  padding-left: 88px; /* space for history toggle button */
   padding-right: 20px;
 }
 
-/* style for the small history toggle inside Display */
+/* History toggle button positioned inside display */
 .Button--history {
   position: absolute;
   left: 12px;
-  top: 12%;
+  top: 50%;
+  transform: translateY(-50%);
   width: 44px;
   height: 44px;
   padding: 0;
@@ -102,27 +112,29 @@ main {
   background-color: var(--button-result-bg);
   border: 1px solid rgba(255, 255, 255, 0.06);
   cursor: pointer;
-  z-index: 4; /* above calculator for clicks */
+  z-index: 4; /* above calculator for click interaction */
 }
 .Button--history:hover {
   background: rgba(0, 0, 0, 0.1);
-  transform: scale(1.05);
+  transform: translateY(-50%) scale(1.05);
 }
 
 /* =========================
-   Buttons grid
+   Calculator Buttons Grid
    ========================= */
 .Buttons {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
 .Button--group {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 
+/* Base button styles */
 .Button {
   height: 64px;
   border: none;
@@ -137,6 +149,8 @@ main {
   border: 1px solid var(--button-border);
   backdrop-filter: blur(10px);
 }
+
+/* Button interaction states */
 .Button:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -151,6 +165,7 @@ main {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Operation buttons styling (+, -, ×, ÷) */
 .Button[data-action="divide"],
 .Button[data-action="multiply"],
 .Button[data-action="subtract"],
@@ -167,7 +182,7 @@ main {
   transform: translateY(-2px);
 }
 
-/* equals and special buttons */
+/* Special button styles */
 .Button--equal {
   background: var(--button-equal-bg);
   color: #fff;
@@ -179,6 +194,7 @@ main {
   transform: translateY(-2px);
 }
 
+/* Control buttons (clear, backspace, percent) */
 .Button[data-action="clear"],
 .Button[data-action="backspace"],
 .Button[data-action="percent"] {
@@ -186,75 +202,25 @@ main {
   color: #fff;
   font-weight: 600;
 }
+
+/* Zero button spans two columns */
 .Button--zero {
   grid-column: span 2;
 }
 
 /* =========================
-   Animations & responsiveness
+   History Panel - Desktop Layout (Side Panel)
    ========================= */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.Calculator {
-  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (max-width: 480px) {
-  main {
-    padding: 20px;
-    margin: 10px;
-  }
-  .Calculator {
-    width: 280px;
-  }
-  .Display {
-    font-size: 2rem;
-    padding: 20px 16px;
-    min-height: 70px;
-  }
-  .Button {
-    height: 56px;
-    font-size: 1.1rem;
-  }
-  .Button--equal {
-    font-size: 1.3rem;
-  }
-}
-@media (max-width: 360px) {
-  .Calculator {
-    width: 260px;
-  }
-  .Display {
-    font-size: 1.8rem;
-  }
-  .Button {
-    height: 52px;
-    font-size: 1rem;
-  }
-}
-
-/* =========================
-   Wrapper & History panel (behaviour & animation)
-   ========================= */
-/* wrapper keeps space for the History panel to slide out from behind */
 .CalculatorWrap {
   position: relative;
-  width: var(--main-width);
+  width: 100%;
+  max-width: var(--main-width);
+  margin: 0 auto;
   height: auto;
-  overflow: visible;
+  overflow: visible; /* allows history panel to extend outside */
 }
 
-/* History panel starts fully behind the calculator (aligned to its left edge).
-   When .is-open is added it translates left by its full width plus extra padding
-   so it visually "comes out from behind" the calculator. */
+/* History panel positioned behind calculator on desktop */
 .History {
   position: absolute;
   left: 0;
@@ -268,54 +234,316 @@ main {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
   overflow: auto;
   z-index: 1; /* behind calculator */
-  transform: translateX(0); /* closed: aligned (hidden behind calculator) */
+  transform: translateX(0); /* closed: hidden behind calculator */
   opacity: 0;
   pointer-events: none;
   transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.22s ease;
   will-change: transform, opacity;
 }
+
+/* Open state: slides out from behind calculator */
 .History.is-open {
-  transform: translateX(calc(-100% - 32px)); /* slide left by width + safe offset */
+  transform: translateX(calc(-100% - 32px)); /* slides left with safe margin */
   opacity: 1;
   pointer-events: auto;
 }
+
+/* Hidden state management for accessibility */
 .History[hidden] {
   display: block;
   opacity: 0;
   pointer-events: none;
 }
 
-/* small styles inside history */
+/* =========================
+   History Panel Content
+   ========================= */
 .button-close {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   height: auto;
-  background-color: var(--button-result-bg);
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   color: inherit;
   cursor: pointer;
   box-shadow: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: background 0.2s ease;
 }
 .button-close:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   transform: scale(1.05);
 }
-.button-close:active {
-  transform: scale(1);
-}
+
 .History__list {
   padding: 0;
-  margin-top: 8px;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  list-style: none;
 }
+
 .History__item {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 6px 8px;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
   cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  transition: background 0.2s ease, transform 0.1s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
+.History__item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+/* =========================
+   Animations
+   ========================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.Calculator {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================
+   Mobile Responsive Styles
+   ========================= */
+
+/* Tablet and mobile layout adjustments */
+@media (max-width: 768px) {
+  body {
+    padding: 20px;
+    align-items: flex-start; /* align to top for better mobile UX */
+    padding-top: 60px; /* space for history panel to open below */
+    overflow: hidden; /* prevents page scroll when history is open */
+  }
+
+  main {
+    padding: 20px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 380px;
+  }
+
+  /* Mobile: History panel repositioned below calculator */
+  .History {
+    position: absolute;
+    left: 0;
+    top: 100%; /* positioned below calculator */
+    width: 100%; /* full width of calculator */
+    height: auto;
+    max-height: 200px;
+    border-radius: 0 0 16px 16px; /* rounded bottom corners only */
+    padding: 14px;
+    overflow-y: auto; /* scroll within history panel */
+    overflow-x: hidden;
+    transform: translateY(-100%); /* closed: hidden above */
+  }
+
+  .History.is-open {
+    transform: translateY(18px); /* open: slides down below calculator */
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Disable hover effects on mobile (touch devices) */
+  .Button:hover {
+    transform: none;
+    box-shadow: 0 4px 12px var(--button-shadow), 0 1px 3px var(--button-active-shadow);
+    background: var(--button-bg);
+  }
+
+  .Button--history:hover {
+    transform: translateY(-50%);
+    background-color: var(--button-result-bg);
+  }
+
+  .History__item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: none;
+  }
+
+  .button-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: none;
+  }
+
+  /* Adjusted sizes for mobile */
+  .Display {
+    font-size: 1.8rem;
+    padding: 20px 16px;
+    min-height: 70px;
+    padding-left: 70px;
+  }
+
+  .Button--history {
+    width: 36px;
+    height: 36px;
+    left: 10px;
+  }
+
+  .Button {
+    height: 56px;
+    font-size: 1.1rem;
+  }
+  .Button--equal {
+    font-size: 1.3rem;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  body {
+    padding: 16px;
+    padding-top: 50px;
+  }
+
+  main {
+    padding: 16px;
+    max-width: 340px;
+  }
+
+  .History {
+    max-height: 180px;
+    padding: 12px;
+  }
+
+  .Calculator {
+    gap: 8px;
+  }
+
+  .Display {
+    font-size: 1.6rem;
+    padding: 18px 14px;
+    min-height: 65px;
+    padding-left: 60px;
+  }
+
+  .Button--history {
+    width: 32px;
+    height: 32px;
+    left: 8px;
+  }
+
+  .Button {
+    height: 52px;
+    font-size: 1rem;
+    border-radius: 12px;
+  }
+
+  .Button--group {
+    gap: 8px;
+  }
+
+  .Buttons {
+    gap: 8px;
+  }
+
+  .button-close {
+    padding: 6px 10px;
+    font-size: 1rem;
+  }
+
+  .History__item {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 360px) {
+  body {
+    padding-top: 40px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  main {
+    max-width: 300px;
+    min-width: 250px; /* prevents calculator from becoming unusable */
+    padding: 12px;
+  }
+
+  .History {
+    max-height: 160px;
+  }
+
+  .Display {
+    font-size: 1.4rem;
+  }
+
+  .Button {
+    height: 48px;
+    font-size: 0.9rem;
+  }
+
+  .Button--equal {
+    font-size: 1.1rem;
+  }
+}
+
+/* Extremely small screens - fallback with horizontal scroll */
+@media (max-width: 280px) {
+  body {
+    overflow-x: auto; /* allows horizontal scroll if needed */
+    justify-content: flex-start; /* align left instead of center */
+    padding: 8px;
+  }
+
+  main {
+    min-width: 250px; /* absolute minimum width */
+    margin: 0; /* remove auto centering */
+  }
+
+  .Display {
+    font-size: 1.2rem;
+    padding: 14px 10px;
+    padding-left: 45px;
+  }
+
+  .Button--history {
+    width: 26px;
+    height: 26px;
+    left: 5px;
+  }
+
+  .Button {
+    height: 44px;
+    font-size: 0.8rem;
+  }
+
+  .Button--group {
+    gap: 6px;
+  }
+
+  .Buttons {
+    gap: 6px;
+  }
+}
+
+/* Landscape orientation optimizations */
+@media (max-height: 600px) and (orientation: landscape) {
+  body {
+    align-items: center;
+    padding-top: 20px;
+    overflow: auto;
+  }
+
+  .History {
+    max-height: 120px; /* smaller height in landscape */
+  }
+}
+
+/* end of file */
