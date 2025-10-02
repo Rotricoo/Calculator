@@ -1,0 +1,321 @@
+/* =========================
+   Variables & Reset
+   ========================= */
+:root {
+  --bg: linear-gradient(140deg, #667eea 0%, #764ba2 100%);
+  --button-letter: #2d3748;
+  --button-bg: rgba(255, 255, 255, 0.9);
+  --button-hover-bg: rgba(255, 255, 255, 0.95);
+  --button-shadow: rgba(0, 0, 0, 0.1);
+  --button-active-shadow: rgba(0, 0, 0, 0.1);
+  --button-border: rgba(255, 255, 255, 0.3);
+  --button-result-bg: rgba(0, 0, 0, 0.8);
+  --button-equations-bg: rgba(233, 61, 213, 0.7);
+  --button-equations-bg2: rgba(255, 69, 109, 0.7);
+  --button-equal-bg: linear-gradient(135deg, rgb(78, 205, 194), #4453a0);
+  --button-equal-bg-hover: linear-gradient(0deg, rgb(38, 208, 206), #2bb8a3);
+
+  /* layout variables used for history positioning */
+  --main-width: 380px;
+  --history-width: 200px;
+  --main-padding: 30px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =========================
+   Page layout
+   ========================= */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, Cantarell, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+main {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: var(--main-padding);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================
+   Calculator area
+   ========================= */
+.Calculator {
+  position: relative;
+  width: var(--main-width);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 3; /* sits above History */
+}
+
+/* top bar: display + history icon */
+.Calculator__top {
+  position: relative;
+}
+
+/* screen / display styles */
+.Display {
+  background: var(--button-result-bg);
+  color: #fff;
+  padding: 24px 20px;
+  border-radius: 16px;
+  font-size: 2rem;
+  font-weight: 300;
+  text-align: right;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+  overflow: hidden;
+  word-break: break-all;
+  padding-left: 88px; /* space for history icon */
+  padding-right: 20px;
+}
+
+/* style for the small history toggle inside Display */
+.Button--history {
+  position: absolute;
+  left: 12px;
+  top: 12%;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 10px;
+  display: inline-grid;
+  place-items: center;
+  color: #fff;
+  background-color: var(--button-result-bg);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  z-index: 4; /* above calculator for clicks */
+}
+.Button--history:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+/* =========================
+   Buttons grid
+   ========================= */
+.Buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.Button--group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.Button {
+  height: 64px;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--button-bg);
+  color: var(--button-letter);
+  box-shadow: 0 4px 12px var(--button-shadow), 0 1px 3px var(--button-active-shadow);
+  border: 1px solid var(--button-border);
+  backdrop-filter: blur(10px);
+}
+.Button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: var(--button-hover-bg);
+}
+.Button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.Button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.Button[data-action="divide"],
+.Button[data-action="multiply"],
+.Button[data-action="subtract"],
+.Button[data-action="add"] {
+  background: linear-gradient(135deg, var(--button-equations-bg), var(--button-equations-bg2));
+  color: #fff;
+  font-weight: 700;
+}
+.Button[data-action="divide"]:hover,
+.Button[data-action="multiply"]:hover,
+.Button[data-action="subtract"]:hover,
+.Button[data-action="add"]:hover {
+  background: linear-gradient(0deg, var(--button-equations-bg), var(--button-equations-bg2));
+  transform: translateY(-2px);
+}
+
+/* equals and special buttons */
+.Button--equal {
+  background: var(--button-equal-bg);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+.Button--equal:hover {
+  background: var(--button-equal-bg-hover);
+  transform: translateY(-2px);
+}
+
+.Button[data-action="clear"],
+.Button[data-action="backspace"],
+.Button[data-action="percent"] {
+  background: linear-gradient(135deg, #a8a8a8, #8a8a8a);
+  color: #fff;
+  font-weight: 600;
+}
+.Button--zero {
+  grid-column: span 2;
+}
+
+/* =========================
+   Animations & responsiveness
+   ========================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.Calculator {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 20px;
+    margin: 10px;
+  }
+  .Calculator {
+    width: 280px;
+  }
+  .Display {
+    font-size: 2rem;
+    padding: 20px 16px;
+    min-height: 70px;
+  }
+  .Button {
+    height: 56px;
+    font-size: 1.1rem;
+  }
+  .Button--equal {
+    font-size: 1.3rem;
+  }
+}
+@media (max-width: 360px) {
+  .Calculator {
+    width: 260px;
+  }
+  .Display {
+    font-size: 1.8rem;
+  }
+  .Button {
+    height: 52px;
+    font-size: 1rem;
+  }
+}
+
+/* =========================
+   Wrapper & History panel (behaviour & animation)
+   ========================= */
+/* wrapper keeps space for the History panel to slide out from behind */
+.CalculatorWrap {
+  position: relative;
+  width: var(--main-width);
+  height: auto;
+  overflow: visible;
+}
+
+/* History panel starts fully behind the calculator (aligned to its left edge).
+   When .is-open is added it translates left by its full width plus extra padding
+   so it visually "comes out from behind" the calculator. */
+.History {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--history-width);
+  height: 100%;
+  background: var(--button-result-bg);
+  color: #fff;
+  border-radius: 12px 0 0 12px;
+  padding: 10px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  overflow: auto;
+  z-index: 1; /* behind calculator */
+  transform: translateX(0); /* closed: aligned (hidden behind calculator) */
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.22s ease;
+  will-change: transform, opacity;
+}
+.History.is-open {
+  transform: translateX(calc(-100% - 32px)); /* slide left by width + safe offset */
+  opacity: 1;
+  pointer-events: auto;
+}
+.History[hidden] {
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* small styles inside history */
+.button-close {
+  font-size: 1.2rem;
+  height: auto;
+  background-color: var(--button-result-bg);
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  box-shadow: none;
+}
+.button-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+.button-close:active {
+  transform: scale(1);
+}
+.History__list {
+  padding: 0;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.History__item {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

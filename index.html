@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <div class="CalculatorWrap">
+        <aside id="History" class="History" hidden>
+          <button id="HistoryClose" class="Button button-close">X</button>
+          <ul id="HistoryList" class="History__list"></ul>
+        </aside>
+
+        <div class="Calculator">
+          <div class="Calculator__top">
+            <button id="HistoryToggle" class="Button Button--history">↻</button>
+            <section class="Display">0</section>
+          </div>
+
+          <section class="Buttons">
+            <div class="Button--group">
+              <button class="Button" data-action="backspace">←</button>
+              <button class="Button" data-action="clear">C</button>
+              <button class="Button" data-action="percent">%</button>
+              <button class="Button" data-action="divide">÷</button>
+            </div>
+
+            <div class="Button--group">
+              <button class="Button" data-action="7">7</button>
+              <button class="Button" data-action="8">8</button>
+              <button class="Button" data-action="9">9</button>
+              <button class="Button" data-action="multiply">×</button>
+            </div>
+
+            <div class="Button--group">
+              <button class="Button" data-action="4">4</button>
+              <button class="Button" data-action="5">5</button>
+              <button class="Button" data-action="6">6</button>
+              <button class="Button" data-action="subtract">−</button>
+            </div>
+
+            <div class="Button--group">
+              <button class="Button" data-action="1">1</button>
+              <button class="Button" data-action="2">2</button>
+              <button class="Button" data-action="3">3</button>
+              <button class="Button" data-action="add">+</button>
+            </div>
+
+            <div class="Button--group">
+              <button class="Button Button--zero" data-action="0">0</button>
+              <button class="Button" data-action=".">.</button>
+              <button class="Button Button--equal" data-action="equals">=</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
